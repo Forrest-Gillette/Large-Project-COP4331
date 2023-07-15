@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const { User } = require('../models/userAPI');
-const Token = require('../models/tokenAPI');
+const { User } = require('../models/userModel');
+const Token = require('../models/tokenModel');
 const sendEmail = require('../util/sendEmailAPI');
 const crypto = require('crypto');
 

@@ -1,7 +1,9 @@
 const router = require("express").Router();
-const { User, validate } = require("../models/userAPI");
 const bcrypt = require("bcrypt");
-const Token = require("../models/tokenAPI");
+
+const { User, validate } = require("../models/userModel");
+const Token = require("../models/tokenModel");
+
 const sendEmail = require("../util/sendEmailAPI");
 const crypto = require("crypto");
 
