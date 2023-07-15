@@ -1,10 +1,10 @@
 import { Route, Routes, Navigate } from "react-router-dom";
-import Main from "./components/Main";
-import Signup from "./components/Singup";
-import Login from "./components/Login";
-import EmailVerify from "./components/EmailVerify";
-import ForgotPassword from "./components/ForgotPassword";
-import ResetPassword from "./components/ResetPassword";
+import Main from "./pages/Main";
+import Signup from "./pages/Signup";
+import Login from "./pages/Login";
+import EmailVerify from "./pages/EmailVerify";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 function App() {
 	const user = localStorage.getItem("token");
