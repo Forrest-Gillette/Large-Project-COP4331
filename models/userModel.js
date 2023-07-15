@@ -173,7 +173,7 @@ const userSchema = new mongoose.Schema({
 	most_visited_location_trips: {type: Number, default: 0},
 	
     most_spent_location: {type: String, default: "None yet!"},
-	most_spent_location_spent: {type: String, default: "None yet!"},
+	most_spent_location_spent: {type: Number, default: 0},
 	most_spent_location_trips: {type: Number, default: 0},
 	
     most_item_category: {type: String, default: "None yet!"},
