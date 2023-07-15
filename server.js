@@ -7,6 +7,7 @@ const registerRoutes = require("./routes/registerAPI");
 const loginRoutes = require("./routes/loginAPI");
 const forgotRoutes = require("./routes/forgotAPI");
 const resetRoutes = require("./routes/resetAPI");
+const createRoutes = require("./routes/createAPI");
 
 
 // express app
@@ -28,6 +29,7 @@ app.use("/api/register", registerRoutes);
 app.use("/api/login", loginRoutes);
 app.use("/api/forgot", forgotRoutes);
 app.use("/api/reset", resetRoutes);
+app.use("/api/create", createRoutes);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("frontend/build"));

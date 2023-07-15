@@ -33,7 +33,7 @@ router.post("/", async(req, res) => {
             const url = `${process.env.BASE_URL}users/${user._id}/verify/${token.token}`
             await sendEmail(user.email, "Verify your email bucco!", url);
 
-            return res.status(400).send({message: "Another email has been sent, please verify your account before signing in."})
+            return res.status(400).send({message: "Please verify your account before signing in."})
         }
 
         const token = user.generateAuthToken();

@@ -1,33 +1,73 @@
-// trip model
 const mongoose = require('mongoose');
 const Joi = require('joi');
 
 const tripSchema = new mongoose.Schema({
-    email: {type: String, required: true},
-    location: {type: String, required: true},
-    dateString: {type: String, required: true},
-    dateInteger: {type: Integer, required: true},
-    total: {type: Float32Array, required:true},
-    didGas: {type: Boolean, default:false, required:true},
-    didBrisket: {type: Boolean, default:false, required:true},
-    didDessert: {type: Boolean, default:false, required:true},
-    didHomeGood: {type: Boolean, default:false, required:true},
-    didOutdoor: {type: Boolean, default:false, required:true},
-    didJerky: {type: Boolean, default:false, required:true},
-    didColdGrab: {type: Boolean, default:false, required:true},
-    didHotGrab: {type: Boolean, default:false, required:true},
-    did3rdParty: {type: Boolean, default:false, required:true}
+  email: { type: String, required: true },
+  location: { type: String, required: true },
+  total: { type: Number, required: true },
+  didGas: { type: Boolean, default: false },
+  didBrisket: { type: Boolean, default: false },
+  didDessert: { type: Boolean, default: false },
+  didHomeGood: { type: Boolean, default: false },
+  didOutdoor: { type: Boolean, default: false },
+  didJerky: { type: Boolean, default: false },
+  didColdGrab: { type: Boolean, default: false },
+  didHotGrab: { type: Boolean, default: false },
+  did3rdParty: { type: Boolean, default: false }
 });
 
-const Trip = mongoose.model("trip", tripSchema);
+const Trip = mongoose.model("Trip", tripSchema);
 
 const validate = (data) => {
-    const schema = Joi.object({
-        email: Joi.string().email().required().label("Email"),
-        location: Joi.string().required().label("Location"),
-        dateString: Joi.string().required().label("Date String"),
-    });
-    return schema.validate(data)
-}
+  const schema = Joi.object({
+    email: Joi.string().email().required().label("Email"),
+    location: Joi.string().required().label("Location"),
+    total: Joi.number().required().label("Total"),
+    didGas: Joi.boolean().label("Did Gas"),
+    didBrisket: Joi.boolean().label("Did Brisket"),
+    didDessert: Joi.boolean().label("Did Dessert"),
+    didHomeGood: Joi.boolean().label("Did Home Good"),
+    didOutdoor: Joi.boolean().label("Did Outdoor"),
+    didJerky: Joi.boolean().label("Did Jerky"),
+    didColdGrab: Joi.boolean().label("Did Cold Grab"),
+    didHotGrab: Joi.boolean().label("Did Hot Grab"),
+    did3rdParty: Joi.boolean().label("Did 3rd Party")
+  });
+  return schema.validate(data);
+};
 
-module.exports = {Trip, validate};
+module.exports = { Trip, validate };
+
+
+
+
+// const mongoose = require('mongoose');
+// const Joi = require('joi');
+
+// const tripSchema = new mongoose.Schema({
+//   email: { type: String, required: true },
+//   location: { type: String, required: true },
+//   total: { type: Number, required: true },
+//   didGas: { type: Boolean, default: false},
+//   didBrisket: { type: Boolean, default: false},
+//   didDessert: { type: Boolean, default: false},
+//   didHomeGood: { type: Boolean, default: false},
+//   didOutdoor: { type: Boolean, default: false},
+//   didJerky: { type: Boolean, default: false},
+//   didColdGrab: { type: Boolean, default: false},
+//   didHotGrab: { type: Boolean, default: false},
+//   did3rdParty: { type: Boolean, default: false}
+// });
+
+// const Trip = mongoose.model("trip", tripSchema);
+
+// const validate = (data) => {
+//   const schema = Joi.object({
+//     email: Joi.string().email().required().label("Email"),
+//     location: Joi.string().required().label("Location"),
+
+//   });
+//   return schema.validate(data);
+// };
+
+// module.exports = { Trip, validate };
