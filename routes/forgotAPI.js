@@ -1,39 +1,53 @@
-const express = require('express');
-const router = express.Router();
-const { User } = require('../models/userModel');
-const Token = require('../models/tokenModel');
-const sendEmail = require('../util/sendEmailAPI');
-const crypto = require('crypto');
+const router = require("express").Router();
+const { User } = require("../models/userModel");
+const Token = require("../models/tokenModel");
+const Joi = require("joi");
+const bcrypt = require("bcrypt");
+const sendEmail = require("../util/sendEmailAPI");
+const crypto = require("crypto");
 
-router.post('/', async (req, res) => {
-  console.log("hello");
+router.post("/", async (req, res) => {
   try {
-    const { email } = req.body;
+    const { error } = validateEmail(req.body);
+    if (error)
+      return res.status(400).send({ message: error.details[0].message });
 
-    // Check if the email exists in the database
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(404).send({ message: 'User not found.' });
+    const user = await User.findOne({ email: req.body.email });
+    if (!user)
+      return res.status(401).send({ message: "Invalid Email!" });
+
+    // Check if a token already exists for the user
+    let token = await Token.findOne({ userId: user._id });
+
+    if (!token) {
+      // If no token exists, create a new one
+      token = await new Token({
+        userId: user._id,
+        token: crypto.randomBytes(32).toString("hex"),
+      }).save();
+    } else {
+      // If a token already exists, update it
+      token.token = crypto.randomBytes(32).toString("hex");
+      await token.save();
     }
 
-    // Generate a unique token
-    const token = crypto.randomBytes(32).toString('hex');
+    const url = `${process.env.BASE_URL}users/${user._id}/reset-password/${token.token}`;
 
-    // Create a new token and save it in the database
-    const newToken = new Token({ userId: user._id, token });
-    await newToken.save();
+    await sendEmail(user.email, "Reset that password buddy!", url);
 
-    // Generate the reset password link
-    const resetLink = `${process.env.BASE_URL}users/${user._id}/reset-password/${token}`;
-
-    // Send the password reset email
-    await sendEmail(user.email, 'Password Reset', resetLink);
-
-    res.status(200).send({ message: 'Password reset link sent.' });
+    res.status(201).send({ message: "Password change link sent!" });
   } catch (error) {
     console.error(error);
-    res.status(500).send({ message: 'Internal Server Error' });
+    res.status(500).send({ message: "Internal Server Error" });
   }
 });
+
+
+const validateEmail = (data) => {
+  const schema = Joi.object({
+    email: Joi.string().email().required().label("Email"),
+  });
+  return schema.validate(data);
+};
 
 module.exports = router;

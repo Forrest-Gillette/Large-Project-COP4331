@@ -6,6 +6,7 @@ const cors = require("cors");
 const registerRoutes = require("./routes/registerAPI");
 const loginRoutes = require("./routes/loginAPI");
 const forgotRoutes = require("./routes/forgotAPI");
+const resetRoutes = require("./routes/resetAPI");
 
 
 // express app
@@ -26,6 +27,7 @@ app.use(cors());
 app.use("/api/register", registerRoutes);
 app.use("/api/login", loginRoutes);
 app.use("/api/forgot", forgotRoutes);
+app.use("/api/reset", resetRoutes);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("frontend/build"));

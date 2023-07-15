@@ -1,57 +1,68 @@
 import { useState } from "react";
 import axios from "axios";
+import { Link, useParams } from "react-router-dom";
+import styles from "./styles.module.css";
 
 const ResetPassword = () => {
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+	const param = useParams();
+  const [data, setData] = useState({
+    password: "",
+  });
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false);
+  const [msg, setMsg] = useState("");
 
-  const handleChangePassword = async (e) => {
+  const handleChange = ({ currentTarget: input }) => {
+    setData({ ...data, [input.name]: input.value });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (password !== confirmPassword) {
-      setError("Passwords do not match");
-      return;
-    }
-
     try {
-      const url = "/api/reset-password";
-      await axios.post(url, { password });
-      setSuccess(true);
+      const url = `/api/reset/${param.id}/reset/${param.token}`;
+      const { data: res } = await axios.post(url, data);
+      setMsg(res.message);
     } catch (error) {
-      setError("Failed to reset password");
+      if (
+        error.response &&
+        error.response.status >= 400 &&
+        error.response.status <= 500
+      ) {
+        setError(error.response.data.message);
+      }
     }
   };
 
   return (
-    <div>
-      <h1>Reset Password</h1>
-      {success ? (
-        <p>Password reset successful. Please login with your new password.</p>
-      ) : (
-        <form onSubmit={handleChangePassword}>
-          <label htmlFor="password">New Password:</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          <label htmlFor="confirmPassword">Confirm Password:</label>
-          <input
-            type="password"
-            id="confirmPassword"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            required
-          />
-          {error && <p>{error}</p>}
-          <button type="submit">Submit</button>
-          <button type="button">Cancel</button>
-        </form>
-      )}
+    <div className={styles.signup_container}>
+      <div className={styles.signup_form_container}>
+        <div className={styles.left}>
+          <h1>Cancel?</h1>
+          <Link to="/login">
+            <button type="button" className={styles.white_btn}>
+              Go Back
+            </button>
+          </Link>
+        </div>
+        <div className={styles.right}>
+          <form className={styles.form_container} onSubmit={handleSubmit}>
+            <h1>Update Password</h1>
+            <input
+              type="password"
+              placeholder="Password"
+              name="password"
+              onChange={handleChange}
+              value={data.password}
+              required
+              className={styles.input}
+            />
+            {error && <div className={styles.error_msg}>{error}</div>}
+            {msg && <div className={styles.success_msg}>{msg}</div>}
+            <button type="submit" className={styles.green_btn}>
+              Reset Password
+            </button>
+          </form>
+        </div>
+      </div>
     </div>
   );
 };

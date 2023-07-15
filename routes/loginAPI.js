@@ -1,7 +1,7 @@
 const router = require("express").Router();
-const {User} = require("../models/userModel");
 const Joi = require("joi");
 const bcrypt = require("bcrypt");
+const { User } = require("../models/userModel");
 const Token = require("../models/tokenModel");
 const sendEmail = require("../util/sendEmailAPI");
 const crypto = require("crypto");

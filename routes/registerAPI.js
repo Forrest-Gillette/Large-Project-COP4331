@@ -1,9 +1,7 @@
 const router = require("express").Router();
 const bcrypt = require("bcrypt");
-
-const { User, validate } = require("../models/userModel");
+const { User , validate} = require("../models/userModel");
 const Token = require("../models/tokenModel");
-
 const sendEmail = require("../util/sendEmailAPI");
 const crypto = require("crypto");
 
@@ -45,13 +43,12 @@ router.get("/:id/verify/:token", async (req, res) => {
     if (!user) return res.status(400).send({ message: "Invalid link" });
 
     const token = await Token.findOne({
-      userId: user._id,
+      userId: req.params.id,
       token: req.params.token,
     });
 
     if (!token) return res.status(400).send({ message: "Invalid link" });
-
-    await User.updateOne({ _id: user._id }, { verified: true });
+    
     await User.updateOne({ _id: user._id }, { verified: true });
     await token.remove();
 
