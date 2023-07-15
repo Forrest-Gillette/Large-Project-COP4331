@@ -19,8 +19,8 @@ module.exports = async (email, subject, text) => {
 
     await transport.sendMail({
       from: process.env.ADMIN,
-       to: 'tyler.beach@ucf.edu',
-      // to: email,
+      //  to: 'tyler.beach@ucf.edu',
+      to: email,
       subject: subject,
       text: text,
     });
