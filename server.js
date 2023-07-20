@@ -18,9 +18,9 @@ const app = express();
 app.use(express.static(path.join(__dirname + "/frontend/build")));
 // AFTER defining routes: Anything that doesn't match what's above, 
 // send back server.html;
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname + '/../frontend/build/server.html'))
-})
+// app.get('*', (req, res) => {
+//   res.sendFile(path.join(__dirname + '/../frontend/build/server.html'))
+// })
 app.use(express.json());
 app.use(cors());
 

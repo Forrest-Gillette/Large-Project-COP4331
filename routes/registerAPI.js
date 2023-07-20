@@ -50,9 +50,15 @@ router.get("/:id/verify/:token", async (req, res) => {
     if (!token) {
       return res.status(400).send({ message: "Invalid link" });
     }
-    
-    await User.updateOne({ _id: user._id }, { verified: true });
-    await User.updateOne({ _id: user._id }, { verified: true });
+
+    await User.updateOne(
+      { _id: user._id },
+      { $set: { verified: true } }
+    );
+    user.verified = true; // Update the verified status of the user
+    await user.save(); // Save the updated user
+
+
     await token.remove();
 
     res.status(200).send({ message: "Email Successfully Verified!" });
@@ -60,5 +66,32 @@ router.get("/:id/verify/:token", async (req, res) => {
     res.status(500).send({ message: "Internal Server Error" });
   }
 });
+
+
+// router.get("/:id/verify/:token", async (req, res) => {
+//   try {
+//     const user = await User.findOne({ _id: req.params.id });
+//     if (!user) return res.status(400).send({ message: "Invalid link" });
+
+//     const token = await Token.findOne({
+//       userId: req.params.id,
+//       token: req.params.token,
+//     });
+
+//     if (!token) {
+//       return res.status(400).send({ message: "Invalid link" });
+//     }
+    
+//     await User.updateOne(
+//       { _id: user._id },
+//       { $set: { verified: true } }
+//     );
+//     await token.remove();
+
+//     res.status(200).send({ message: "Email Successfully Verified!" });
+//   } catch (error) {
+//     res.status(500).send({ message: "Internal Server Error" });
+//   }
+// });
 
 module.exports = router;
